@@ -1,0 +1,22 @@
+"""4空格缩进代表代码分层
+
+if experssion:
+    statement(s) 
+else:
+    statement(s)
+
+
+if experssion:
+    statement(s) 
+elif experssion2:
+    statement(s)
+elif ...:
+    ...
+else:
+    statement(s)
+
+
+
+逻辑值：
+	——True  : 表示非空的量(比如:string,tuple,list,set,dict等),所有非零数
+  ——False : 表示0,None,空的量等

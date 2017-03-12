@@ -1,0 +1,8 @@
+for循环
+	——在python for 循环遍历序列
+
+for循环语法:
+  ——for iterationg_var in sequence:
+        statements(s)
+
+range(i,j,[步进值]): i为初始值;j为终止值(但不包括在范围内);步进值
