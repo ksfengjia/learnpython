@@ -1,0 +1,2 @@
+cd到C:\Program Files (x86)\Python27\Scripts目录下，
+使用pip install matlibplot命令
