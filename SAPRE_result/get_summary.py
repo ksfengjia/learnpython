@@ -3,32 +3,40 @@
 import os
 
 
-# get original summary from DNBR.output
-
 def get_filenamelist(dir, keyword):
+    """
+    获取dir目录下包含keyword的filenamelist
+    :param dir: 路径
+    :param keyword: 关键词
+    :return: filenamelist
+    """
     filenamelist = []
     # os.listdir()——指定所有目录下所有的文件和目录名。
-    for s in os.listdir(dir):
-        if keyword in s:
-            filenamelist.append(s)
+    for filename in os.listdir(dir):
+        if keyword in filename:
+            filenamelist.append(filename)
     return filenamelist
 
 
 def get_orignal_summary(dir):
-    filenamelist = get_filenamelist(dir, '.out')
+    """
+    获取包含keystatement的首行到非空行
+    :param dir: 路径
+    """
+    filenamelist = get_filenamelist(dir, '.out') # get original summary from SAPRE.out
     fileoutput = open(dir + '/Sapre_Summary.txt', 'w')
-    for s in filenamelist:
-        fileinput = open(dir + '/' + s, 'r')
-        fileoutput.write(s + '\n')
+    keystatement = 'channel no.'
+
+    for filename in filenamelist:
+        fileinput = open(dir + '/' + filename, 'r')
+        fileoutput.write(filename + '\n')
         fileoutput.write('\n')
+
+        # while True should be used with break statement
         while True:
-            line = fileinput.readline()
-            if (line != ''):
-                if ('channel no.' in line):
-                    fileoutput.write(line)
-                    for index in range(7):
-                        line2 = fileinput.readline()
-                        fileoutput.write(line2)
+            line1 = fileinput.readline()
+            if (line1 != ''):
+                if (keystatement in line1):
                     while True:
                         line2 = fileinput.read()
                         if len(line2) > 1:
@@ -40,16 +48,19 @@ def get_orignal_summary(dir):
         fileinput.close()
     fileoutput.close()
 
-
-# get_orignal_summary(os.getcwd() + '/mshimbaseload3_deplcr')
-# get_orignal_summary(os.getcwd() + '/mshimbaseload3_nodeplcr')
 # os.getcwd()——得到当前工作的目录。
+# 处理/Realse/*.out文件
 get_orignal_summary(os.getcwd() + '/Realse')
 
 
 # get parsed summary for excel
-
 def find_keyline(file, keyword):
+    """
+
+    :param file: 文件
+    :param keyword: 关键词
+    :return: 包含关键词的行
+    """
     line = 'hello world'
     while line != '':
         line = file.readline()
@@ -89,7 +100,7 @@ def parse_ssls(file, keyword):
     return outlist
 
 
-def parse_dnbr(file, keyword):
+def parse_SAPRE(file, keyword):
     outlist = [keyword, ]
 
     # seek(offset,whence=0)
@@ -119,10 +130,11 @@ def parse_dnbr(file, keyword):
             break
     return outlist
 
-
 def get_parse_summary(fileinput, fileoutput, namelist, parsefunc):
     for keyword in namelist:
         for s in parsefunc(fileinput, keyword):
+            # isinstance: Return whether an object is an instance of a class or of a subclass thereof
+            # isinstance: 判断实例是否是这个类或者object是变量
             if isinstance(s, str):
                 print s
                 fileoutput.write(s)
@@ -132,17 +144,17 @@ def get_parse_summary(fileinput, fileoutput, namelist, parsefunc):
             fileoutput.write('\n')
         fileoutput.write('\n')
 
-file1 = open(os.getcwd() + '/Realse/Sapre_Summary.txt', 'r')
+filein = open(os.getcwd() + '/Realse/Sapre_Summary.txt', 'r')
 
-file3 = open(os.getcwd() + '/Realse/Summary_dnbr.txt', 'w')
+fileout = open(os.getcwd() + '/Realse/Summary_DNBR.txt', 'w')
 
-namelist1 = []
+namelist_channel = []
 for i in range(1,15):
-    namelist1.append("%s%2d"%('channel no.   ',i))
-    print namelist1[i-1]
+    namelist_channel.append("%s%2d" % ('channel no.   ', i))
+    print namelist_channel[i - 1]
 
-get_parse_summary(file1, file3, namelist1, parse_dnbr)
+get_parse_summary(filein, fileout, namelist_channel, parse_SAPRE)
 
-file1.close()
-file3.close()
+filein.close()
+fileout.close()
 

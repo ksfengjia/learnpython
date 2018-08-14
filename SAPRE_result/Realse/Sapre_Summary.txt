@@ -1,4 +1,4 @@
-DNBR.output
+SAPRE.out
 
          channel no.    1                                                                 simulation time seconds
 
